@@ -27,7 +27,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update() {
         isGrounded = controller.isGrounded;
-        Debug.Log(isGrounded);
         Walk();
         Sprint();
         Jump();
