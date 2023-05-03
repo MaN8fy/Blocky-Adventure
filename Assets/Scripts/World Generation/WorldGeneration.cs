@@ -36,19 +36,18 @@ public class WorldGeneration : MonoBehaviour
     private Chunk chunk;
     private Vector3 chunkOffset;
     private GameObject chunkObject;
-    private GameObject voxelObject;
     private int chunkHeight;
     private int chunkSize;
     private int chunkIndex;
         
     private void Start() {
-        if (seed != 0) {
+        if (seed == 0) {
             seed = UnityEngine.Random.Range(0f, 999999f);
         }
 
-        chunkHeight = checkAndEven(chunkDepth);
+        chunkDepth = checkAndEven(chunkDepth);
         chunkSize = chunkLengthWidth/2;
-        chunkHeight = chunkHeight/2;
+        chunkHeight = chunkDepth/2;
 
         for (int chunkXOffset = -chunksToRenderAround; chunkXOffset <= chunksToRenderAround; chunkXOffset++) {
             for (int chunkZOffset = -chunksToRenderAround; chunkZOffset <= chunksToRenderAround; chunkZOffset++) {
@@ -59,7 +58,7 @@ public class WorldGeneration : MonoBehaviour
         }
     }
 
-    //creates a chunk, containing voxels
+    //creates a chunk
     private void createChunk(int xOffset, int zOffset) {
         chunkOffset = new Vector3(xOffset, 0, zOffset);
         Chunk chunk = new Chunk(chunkOffset);
@@ -69,7 +68,8 @@ public class WorldGeneration : MonoBehaviour
         for (int x=-chunkSize; x < chunkSize; x++) {
             for (int z=-chunkSize; z < chunkSize; z++) {
                 int maxHeight = calculateVoxelMaxHeight(x, z, chunkOffset);
-                for (int y=-chunkHeight; y < chunkHeight; y++) {
+                Debug.Log(maxHeight);
+                for (int y=-chunkHeight; y < maxHeight; y++) {
                     voxel = new Voxel(groundBlock);
                     voxel.x = x;
                     voxel.y = y;
@@ -82,36 +82,45 @@ public class WorldGeneration : MonoBehaviour
     }
 
     private int calculateVoxelMaxHeight(int x, int z, Vector3 offset) {
-        float xCoord = (float)x / chunkSize * 40f + offset.x + seed;
-        float zCoord = (float)z / chunkSize * 40f + offset.z + seed;
+        float xCoord = (float)x / chunkSize;
+        float zCoord = (float)z / chunkSize;
 
-        float maxHeightFloat = 1/(chunkHeight-1)*Mathf.PerlinNoise(xCoord, zCoord);
-        int maxHeight = Mathf.RoundToInt(maxHeightFloat);
+        float maxHeightFloat = Mathf.PerlinNoise(xCoord, zCoord);
+        float convertToChunkHeight = (maxHeightFloat*(chunkHeight+chunkHeight))-chunkHeight;
+        int maxHeight = Mathf.RoundToInt(convertToChunkHeight);
         return maxHeight;
     }
 
     private void renderChunk(Chunk chunk) {
         Vector3 chunkOffset = chunk.GetOffset(); 
         Vector3 offsetPosition = chunkOffset*chunkSize;
+        Voxel voxel;
+        GameObject spawnedVoxel;
         BoxCollider chunkCollider;
         string chunkName = String.Format("Chunk [{0}, {1}, {2}]", chunkOffset.x.ToString(), chunkOffset.y.ToString(), chunkOffset.z.ToString());
-        
+
         chunkObject = new GameObject(chunkName);
         chunkObject.transform.parent = gameObject.transform;
         chunkCollider = chunkObject.AddComponent<BoxCollider>();
         chunkCollider.isTrigger = true;
-        chunkCollider.size = new Vector3(chunkSize, chunkHeight, chunkSize);
+        chunkCollider.size = new Vector3(chunkLengthWidth, chunkDepth, chunkLengthWidth);
 
+        BoxCollider voxelCollider;
         for (int x=-chunkSize; x < chunkSize; x++) {
             for (int z=-chunkSize; z < chunkSize; z++) {
+                int maxHeight = calculateVoxelMaxHeight(x, z, chunkOffset);
                 for (int y=-chunkHeight; y < chunkHeight; y++) {
-                    Voxel voxel = chunk.GetVoxel(x, y, z);
+                    voxel = chunk.GetVoxel(x, y, z);
                     if (voxel != null) {
                         string voxelName = String.Format("{0}, {1}, {2}, {3}",voxel.GetBlock().ToString(), x.ToString(), y.ToString(), z.ToString());
-                        voxelObject = new GameObject(voxelName);
-                        voxelObject.transform.parent = chunkObject.transform;
-                        voxelObject.transform.position = new Vector3(x, y, z);
+                        spawnedVoxel = new GameObject(voxelName, typeof(MeshFilter), typeof(MeshRenderer));
+                        spawnedVoxel.transform.parent = chunkObject.transform;
+                        spawnedVoxel.transform.position = new Vector3(x+0.5f, y+0.5f, z+0.5f);
                         //make it guad !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        if(y == maxHeight-1) {
+                            voxelCollider = spawnedVoxel.AddComponent<BoxCollider>();
+                            voxelCollider.isTrigger = true;
+                        }
                     }
                 }
             }
@@ -132,7 +141,7 @@ public class WorldGeneration : MonoBehaviour
     
     public Voxel GetTopNeighbour(Voxel voxel, Chunk chunk){
         Voxel neighbourVoxel;
-        if(voxel.y == chunkSize) {
+        if(voxel.y == chunkHeight) {
             Vector3 offset = chunk.GetOffset();
             offset.y += 1;
             chunk = GetChunkByOffset(offset);
@@ -190,7 +199,7 @@ public class WorldGeneration : MonoBehaviour
             if(chunk == null) {
                 return null;
             }
-            neighbourVoxel = chunk.GetVoxel(voxel.x, chunkSize, voxel.z);
+            neighbourVoxel = chunk.GetVoxel(voxel.x, chunkHeight, voxel.z);
             return neighbourVoxel;
         } else {
             neighbourVoxel = chunk.GetVoxel(voxel.x, voxel.y - 1, voxel.z);
