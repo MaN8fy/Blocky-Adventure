@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+//mouse movement
 public class MouseLook : MonoBehaviour
 {
     public float mouseSensitivity;

@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
         Gravity();
     }
 
-    /*Player actions*/
+    //Player actions
     private void Walk() {
         move = controls.Player.Movement.ReadValue<Vector2>();
 
@@ -64,8 +64,6 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
     }
 
-
-    /*Enabling & Disabling controls*/
     private void OnEnable() {
         controls.Enable();
     }
