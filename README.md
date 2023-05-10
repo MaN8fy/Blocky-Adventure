@@ -79,4 +79,4 @@ This project is created for the job application process. Game was made using Uni
 
 #### Switch item
 
--Scroll up or down switches current block which player can spawn.
+- Scroll up or down switches current block which player can spawn.
