@@ -47,8 +47,8 @@ MonoBehaviour:
   groundBlock: {fileID: 11400000, guid: a2bbc08f7465d0246abae8f7f10cae66, type: 2}
   topLevelBlock: {fileID: 11400000, guid: db0450dd26f96ba4a972f8bbeb014ac5, type: 2}
   bottomLevelBlock: {fileID: 11400000, guid: dba295c1fb1ea0245b8ddc5627d5c7d0, type: 2}
-  chunkLengthWidth: 14
+  chunkLengthWidth: 16
   chunkDepth: 60
   chunksToRenderAround: 1
   seed: 0
-  scale: 20
+  scale: 10

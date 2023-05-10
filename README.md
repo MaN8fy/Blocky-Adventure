@@ -18,6 +18,7 @@ This project is created for the job application process. Game was made using Uni
 - Use *Player* prefab to set speed, jump height, etc. In *Main Camera* you can set mouse sensitivity.
   - Furthermore you can set Ray Distance (hand length) - Distance where you can destroy / place blocks.
   - Attack Delay - currently (default) set to 0.8f - This value determines in what time interval the "HoldAttack" action is executed.
+  - Inventory blocks - blocks player can spawn (game is in "creative" mode).
 - Use *World* gameobject to set chunk Length, Width & Depth (Number of voxels).
   - Set number of *Chunk To Render Around* (**NOCH**) around the current chunk on each side  => (1 + value\*2)^2 => if value is 2 number of chunks is 25.
   - Choose different block types for underground, ground and high level blocks.
@@ -34,6 +35,7 @@ This project is created for the job application process. Game was made using Uni
 - **Shift** and **Left Trigger** (*gamepad*) is mapped for sprint.
 - **Left Mouse Button** or **Right Trigger** to destroy blocks (hold).
 - **Right Mouse Button** or **Right Shoulder** to place blocks (single-click).
+- **Scroll wheel** to switch blocks to place
 
 ## How it works:
 
@@ -74,3 +76,7 @@ This project is created for the job application process. Game was made using Uni
 - If ray hits a block, its informations are gained.
 - Afterwards block spawn position is calculated.
 - Place function is sent to world generation script, where can be handeled actual block creation and update of neighbour blocks (for proper rendering).
+
+#### Switch item
+
+-Scroll up or down switches current block which player can spawn.

@@ -32,8 +32,6 @@ public class WorldGeneration : MonoBehaviour
     [MinValue(1)]
     public float scale;
 
-    private float calculatedRandom;
-
     /*All chunks are stored in this list and each chunk stores information about its voxels*/
     private List<Chunk> chunks = new List<Chunk>();
     private List<Chunk> renderedChunks = new List<Chunk>();
@@ -59,7 +57,7 @@ public class WorldGeneration : MonoBehaviour
 
     private void Awake() {
         if (seed == 0) {
-            seed = UnityEngine.Random.Range(0, 999999);
+            seed = UnityEngine.Random.Range(0, 99999);
         }
         
         //these two values are better to store as even number for further calculations
@@ -69,8 +67,6 @@ public class WorldGeneration : MonoBehaviour
         //this is length from middle to border of chunk
         chunkOneSideLength = chunkLengthWidth/2;
         chunkHeight = chunkDepth/2;
-
-        calculatedRandom = (float)chunkLengthWidth * scale;
 
         //renders first bunch of chunks
         for (int x = -chunksToRenderAround-1; x <= chunksToRenderAround+1; x++) {
@@ -220,12 +216,15 @@ public class WorldGeneration : MonoBehaviour
 
     //Perlin noise calculation
     public int calculateVoxelMaxHeight(int x, int z, Vector3 offset) {
-        float xCoord = (float)x / calculatedRandom + seed + offset.x;
-        float zCoord = (float)z / calculatedRandom + seed + offset.z;
-
+        offset *= chunkLengthWidth;
+        float xCoord = ((float)x+offset.x) / 256 * scale + seed;
+        float zCoord = ((float)z+offset.z) / 256 * scale + seed;
         float maxHeightFloat = Mathf.PerlinNoise(xCoord, zCoord);
         float convertToChunkHeight = (maxHeightFloat*(chunkHeight+chunkHeight))-chunkHeight;
         int maxHeight = Mathf.RoundToInt(convertToChunkHeight);
+        if (maxHeight == -chunkHeight) {
+            maxHeight++;
+        };
         return maxHeight;
     }
 
@@ -548,7 +547,7 @@ public class WorldGeneration : MonoBehaviour
         }
     }
 
-    public void SpawnNewCube(RaycastHit hit) {
+    public void SpawnNewCube(RaycastHit hit, ScriptableBlock blockToSpawn) {
 
         Transform defaultTransform = hit.collider.transform;
         Vector3 spawnDirection = defaultTransform.position-hit.point;
@@ -604,7 +603,7 @@ public class WorldGeneration : MonoBehaviour
         Chunk chunk = GetChunkByOffset(chunkOffset);
         Voxel voxel;
 
-        voxel = new Voxel(groundBlock);
+        voxel = new Voxel(blockToSpawn);
         voxel.x = (int)spawnPosition.x;
         voxel.y = (int)spawnPosition.y;
         voxel.z = (int)spawnPosition.z;

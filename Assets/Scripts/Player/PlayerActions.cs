@@ -20,7 +20,11 @@ public class PlayerActions : MonoBehaviour
 
     Transform cameraTransform;
 
+    ScriptableBlock blockToSpawn;
+
     public WorldGeneration world;
+
+    private Inventory inventory;
     
     void Awake()
     {
@@ -28,12 +32,14 @@ public class PlayerActions : MonoBehaviour
     }
 
     private void Start() {
-        
+        inventory = GetComponent<Inventory>();
+        blockToSpawn = inventory.Blocks[inventory.currentItem];
     }
 
     void Update()
     {
         CheckAttack();
+        CheckScroll();
     }
 
     private void CheckAttack(){
@@ -48,7 +54,7 @@ public class PlayerActions : MonoBehaviour
     private void SecondAction() {
         if(Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLength)) { //hitted something
             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Block")) { //if block
-                world.SpawnNewCube(hit);
+                world.SpawnNewCube(hit, blockToSpawn);
             }
         }
     }
@@ -77,6 +83,19 @@ public class PlayerActions : MonoBehaviour
                 oldHit = hit;
             }
         }
+    }
+
+    private void CheckScroll() {
+        float scroll;
+        scroll = controls.Player.Inventory.ReadValue<float>();
+        if (scroll > 0) {
+            inventory.switchItem(1);
+            blockToSpawn = inventory.Blocks[inventory.currentItem];
+        } else if (scroll < 0) {
+            inventory.switchItem(-1);
+            blockToSpawn = inventory.Blocks[inventory.currentItem];
+        }
+
     }
 
     private void AttackButtonPressed(InputAction.CallbackContext obj)
