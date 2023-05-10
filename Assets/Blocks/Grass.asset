@@ -15,3 +15,4 @@ MonoBehaviour:
   blockName: Grass
   destroyDifficulty: 2
   stack: 64
+  material: {fileID: 2100000, guid: 3e148090eeb36c64191b69f8d8bae0c4, type: 2}

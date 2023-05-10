@@ -1,5 +1,9 @@
+using UnityEngine;
+
 public class Voxel {
     public ScriptableBlock block;
+    public Vector3 chunkOffset;
+    public GameObject voxelObject;
     public int x;
     public int y;
     public int z;
@@ -8,7 +12,7 @@ public class Voxel {
         block = blockType;
     }
 
-    public ScriptableBlock GetBlock() {
+    public ScriptableBlock GetScriptableBlock() {
         return block;
     }
 }

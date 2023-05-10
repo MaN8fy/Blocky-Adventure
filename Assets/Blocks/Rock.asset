@@ -15,3 +15,4 @@ MonoBehaviour:
   blockName: Rock
   destroyDifficulty: 4
   stack: 64
+  material: {fileID: 2100000, guid: 069273dd2f6a4df4d95cdf519a09ed9d, type: 2}

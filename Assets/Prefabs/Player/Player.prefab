@@ -58,7 +58,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 90
   orthographic: 0
@@ -144,6 +144,7 @@ GameObject:
   - component: {fileID: 336272181150781094}
   - component: {fileID: 336272181150781095}
   - component: {fileID: 7742892850715387160}
+  - component: {fileID: 7191828526736602786}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -198,7 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 4
-  sprintSpeed: 6
+  sprintSpeed: 7
   jumpHeight: 1
 --- !u!114 &7742892850715387160
 MonoBehaviour:
@@ -212,3 +213,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1987285f9c1bd14f9b298e3c51ab6c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  worldGeneration: {fileID: 0}
+--- !u!114 &7191828526736602786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336272181150781093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0335e7ca200203f40a98c27246914dca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackDelay: 0.8
+  rayLength: 5
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 64

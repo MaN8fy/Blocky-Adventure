@@ -6,6 +6,7 @@ using UnityEngine;
 public class Chunk {
     public List<Voxel> voxels = new List<Voxel>();
     public Vector3 offset;
+    public GameObject chunkObject;
 
     public Chunk(Vector3 getOffset) {
         offset = getOffset;

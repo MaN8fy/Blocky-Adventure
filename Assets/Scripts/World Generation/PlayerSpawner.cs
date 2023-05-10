@@ -15,6 +15,6 @@ public class PlayerSpawner : MonoBehaviour
     {
         spawnLocationY = world.calculateVoxelMaxHeight(0, 0, new Vector3(0f, 0f, 0f));
         spawnLocationY = spawnLocationY+0.5f;
-        playerObject.transform.position = new Vector3(0f, spawnLocationY, 0);
+        playerObject.transform.position = new Vector3(0f, spawnLocationY + 0.5f, 0);
     }
 }

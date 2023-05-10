@@ -6,4 +6,6 @@ public class ScriptableBlock : ScriptableObject {
     public string blockName;
     public int destroyDifficulty;
     public int stack;
+    public Material material;
+    
 }
